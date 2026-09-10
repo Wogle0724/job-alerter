@@ -55,6 +55,9 @@ Open the company's careers page and read the URL:
 | `jobs.smartrecruiters.com/COMPANY` | `ats: smartrecruiters` + `token: COMPANY` |
 | `apply.workable.com/COMPANY` | `ats: workable` + `token: COMPANY` |
 | `TENANT.wd5.myworkdayjobs.com/SITE` | `ats: workday` + `token: TENANT`, `host: wd5`, `site: SITE` |
+| Google careers | `ats: google` |
+| Amazon jobs | `ats: amazon` |
+| *no public feed* | `ats: linkedin` + `company_slug: some-co` |
 
 ```yaml
   - name: Some Company
@@ -67,6 +70,32 @@ a matching posting live, you get an email on the next cycle.
 
 Tip: if a careers page is embedded on the company's own domain, view the page
 source or the network tab and look for one of the hostnames above.
+
+### Coverage caveats
+
+Not every company publishes an open job feed. Two tiers here:
+
+**Direct feeds (complete and reliable)** — every posting on the board is read.
+That's every company above except the five below.
+
+**LinkedIn guest search (best-effort net)** — Microsoft, Meta, LinkedIn, Uber
+and Intuit publish no public feed, so their postings are read from LinkedIn's
+public search, filtered to that company. This is keyword-driven and returns
+roughly 10 results per query, so it can miss a posting that a real ATS feed
+would always catch. It also varies run to run. Treat these five as a useful
+net, not a guarantee.
+
+**Apple is not covered.** Their careers search page ignores the search query
+server-side (it returns the same retail jobs no matter what you ask for), and
+their internal API is tied to browser session state and returns empty results
+intermittently. There's no stable way to read it, so it was left out rather
+than shipped as something that looks like it works but doesn't. Check
+[jobs.apple.com](https://jobs.apple.com/en-us/search) by hand, or set up an
+email alert on their site.
+
+**"Gemini"** in `companies.yml` is the crypto exchange (Greenhouse board
+`gemini`). Google's Gemini roles are posted under Google, which is covered by
+the `google` adapter.
 
 ## Tuning what matches
 
