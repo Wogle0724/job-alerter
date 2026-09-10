@@ -85,7 +85,7 @@ def cycle(settings, companies, matcher, store, dry_run=False):
         return len(hits)
 
     try:
-        msg_id = notify.send_digest(settings, hits, failures)
+        msg_id = notify.send_digest(settings, hits, failures, matcher.target_year)
     except notify.NotifyError as e:
         # Leave them unmarked so the next cycle retries instead of losing them.
         log.error("email failed (%s) -- will retry these next cycle", e)

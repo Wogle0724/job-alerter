@@ -31,7 +31,7 @@ def _subject(hits):
     return f"{len(hits)} new PM intern postings — {shown}{more}"
 
 
-def _render_html(hits, failures):
+def _render_html(hits, failures, year="2027"):
     rows = []
     for h in hits:
         job, v = h["job"], h["verdict"]
@@ -52,7 +52,7 @@ def _render_html(hits, failures):
         <span style="display:inline-block;padding:2px 8px;border-radius:10px;
               background:{color}1a;color:{color};font-weight:600;">
           {v['label']} confidence</span>
-        &nbsp;{html.escape(' · '.join(v['reasons']))}
+        &nbsp;{' &#183; '.join(html.escape(r) for r in v['reasons'])}
       </div>
       <div style="margin-top:12px;">
         <a href="{html.escape(job['url'])}"
@@ -85,7 +85,7 @@ def _render_html(hits, failures):
     {len(hits)} new posting{'s' if len(hits) != 1 else ''} matched
   </div>
   <div style="font-size:13px;color:#666;margin-top:4px;">
-    Summer 2027 product management — found by your job alerter.
+    Summer {year} product management &#8212; found by your job alerter.
   </div>
   <table style="width:100%;border-collapse:collapse;margin-top:8px;">{''.join(rows)}</table>
   {warn}
@@ -110,7 +110,7 @@ def _render_text(hits):
     return "\n".join(lines)
 
 
-def send_digest(settings, hits, failures=()):
+def send_digest(settings, hits, failures=(), year="2027"):
     """Send one email covering every new hit. Raises NotifyError on failure."""
     if not settings.resend_key:
         raise NotifyError("RESEND_API_KEY is not set")
@@ -121,7 +121,7 @@ def send_digest(settings, hits, failures=()):
         "from": settings.email_from,
         "to": [settings.email_to],
         "subject": _subject(hits),
-        "html": _render_html(hits, list(failures)),
+        "html": _render_html(hits, list(failures), year),
         "text": _render_text(hits),
     }
     r = requests.post(
