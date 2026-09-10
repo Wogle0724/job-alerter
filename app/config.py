@@ -28,6 +28,8 @@ REQUIRED_FIELDS = {
     "workable": ["token"],
     "workday": ["token", "site"],
     "amazon": [],
+    "google": [],
+    "linkedin": ["company_slug"],
     "generic": ["url"],
 }
 

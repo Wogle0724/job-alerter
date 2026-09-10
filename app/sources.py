@@ -261,6 +261,118 @@ def generic(c):
     return out
 
 
+GOOGLE_LINK_RE = re.compile(r'href="(jobs/results/(\d+)-([a-z0-9-]+))[^"]*"')
+H3_RE = re.compile(r"<h3[^>]*>([^<]{5,120})</h3>")
+
+
+def google(c):
+    """Google's careers results page is server-rendered, so it can be read.
+
+    Titles sit in an <h3> just before each job link. Google rotates its CSS
+    class names, so rather than matching a class we take the nearest heading
+    *before* each link and fall back to the URL slug if that ever stops
+    working.
+    """
+    base = "https://www.google.com/about/careers/applications/jobs/results/"
+    searches = c.get("searches") or ["product"]
+    out, seen = [], set()
+    for term in searches:
+        for page in range(1, 4):
+            params = {"q": term, "employment_type": "INTERN", "page": page}
+            resp = requests.get(
+                base, params=params, headers={**HEADERS, "Accept": "text/html,*/*"},
+                timeout=TIMEOUT,
+            )
+            resp.raise_for_status()
+            body = resp.text
+            headings = [(m.start(), m.group(1)) for m in H3_RE.finditer(body)]
+            links = list(GOOGLE_LINK_RE.finditer(body))
+            for m in links:
+                path, jid, slug = m.group(1), m.group(2), m.group(3)
+                if jid in seen:
+                    continue
+                seen.add(jid)
+                prior = [t for pos, t in headings if pos < m.start()]
+                title = (
+                    prior[-1].strip()
+                    if prior
+                    else slug.replace("-", " ").title()
+                )
+                out.append(
+                    {
+                        "id": jid,
+                        "title": html.unescape(title),
+                        "location": "",
+                        "url": urljoin(base, path),
+                        "description": "",
+                    }
+                )
+            if not links:
+                break
+    return out
+
+
+LI_CARD_RE = re.compile(
+    r'data-entity-urn="urn:li:jobPosting:(\d+)".*?'
+    r'base-card__full-link[^>]*href="([^"]+)".*?'
+    r'base-search-card__title">\s*([^<]+?)\s*</h3>',
+    re.S,
+)
+
+
+def linkedin(c):
+    """Best-effort net for companies with no open job feed of their own.
+
+    Microsoft, Meta, Intuit, LinkedIn and Uber don't publish a public job
+    API, but they do syndicate to LinkedIn, whose guest search needs no
+    login. Results are filtered by the company slug in each job URL
+    (".../product-manager-at-microsoft-123"), which turned out to be more
+    reliable than LinkedIn's numeric company ids.
+
+    Caveat worth knowing: this is keyword-driven and returns ~10 results per
+    query, so it is a good net rather than a complete listing the way a real
+    ATS feed is. LinkedIn also rate-limits aggressively -- a refusal surfaces
+    as a SourceError so the rest of the run carries on.
+    """
+    api = "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search"
+    slug = c["company_slug"]
+    label = c.get("search_name", c["name"])
+    terms = c.get("searches") or [
+        f"product manager intern {label}",
+        f"product management intern {label}",
+        f"product design intern {label}",
+    ]
+    out, seen = [], set()
+    for term in terms:
+        params = {"keywords": term, "start": 0}
+        if c.get("company_id"):
+            params["f_C"] = c["company_id"]
+        r = requests.get(
+            api, params=params, headers={**HEADERS, "Accept": "text/html,*/*"},
+            timeout=TIMEOUT,
+        )
+        if r.status_code in (403, 429, 999):
+            raise SourceError(
+                f"LinkedIn refused the request (HTTP {r.status_code}) -- "
+                "it rate-limits automated traffic"
+            )
+        r.raise_for_status()
+        for jid, url, title in LI_CARD_RE.findall(r.text):
+            if jid in seen or f"-at-{slug}-" not in url:
+                continue
+            seen.add(jid)
+            out.append(
+                {
+                    "id": jid,
+                    "title": html.unescape(title.strip()),
+                    "location": "",
+                    "url": url.split("?")[0],
+                    "description": "",
+                }
+            )
+    return out
+
+
 ADAPTERS = {
     "greenhouse": greenhouse,
     "lever": lever,
@@ -269,6 +381,8 @@ ADAPTERS = {
     "workable": workable,
     "workday": workday,
     "amazon": amazon,
+    "google": google,
+    "linkedin": linkedin,
     "generic": generic,
 }
 
@@ -317,4 +431,11 @@ def board_url(company):
         return f"https://{token}.{host}.myworkdayjobs.com/en-US/{site}"
     if ats == "amazon":
         return "https://www.amazon.jobs/en/search?base_query=product+manager+intern"
+    if ats == "google":
+        return (
+            "https://www.google.com/about/careers/applications/jobs/results/"
+            "?employment_type=INTERN&q=product"
+        )
+    if ats == "linkedin":
+        return f"https://www.linkedin.com/company/{company['company_slug']}/jobs/"
     return company.get("url", "")

@@ -17,6 +17,16 @@
 #   careers_url: https://...   the "browse all openings" link in your email.
 #                              Defaults to the company's public board.
 #
+# Companies with no public job feed of their own are read from LinkedIn's
+# guest search, filtered to that company:
+#   - name: Some Co
+#     ats: linkedin
+#     company_slug: some-co        # the "-at-some-co-" part of a job URL
+#
+# Google's careers site is server-rendered, so it has its own adapter:
+#   - name: Google
+#     ats: google
+#
 # Last resort for a company with no supported ATS:
 #   - name: Some Co
 #     ats: generic
@@ -28,7 +38,40 @@ companies:
   - name: Amazon
     ats: amazon
 
+  # ---- Google (own careers site, server-rendered) -------------------------
+  - name: Google
+    ats: google
+
+  # ---- No public job feed: read via LinkedIn guest search -----------------
+  # Best-effort net rather than a complete listing -- see README.
+  - name: Microsoft
+    ats: linkedin
+    company_slug: microsoft
+  - name: Meta
+    ats: linkedin
+    company_slug: meta
+  - name: LinkedIn
+    ats: linkedin
+    company_slug: linkedin
+  - name: Uber
+    ats: linkedin
+    company_slug: uber
+  - name: Intuit
+    ats: linkedin
+    company_slug: intuit
+
+  # ---- Lever --------------------------------------------------------------
+  - name: Spotify
+    ats: lever
+    token: spotify
+
   # ---- Greenhouse ---------------------------------------------------------
+  - name: DoorDash
+    ats: greenhouse
+    token: doordashusa
+  - name: Gemini
+    ats: greenhouse
+    token: gemini
   - name: Stripe
     ats: greenhouse
     token: stripe
@@ -149,7 +192,6 @@ companies:
     ats: ashby
     token: sierra
 
-  # ---- Lever --------------------------------------------------------------
   - name: Palantir
     ats: lever
     token: palantir
@@ -210,7 +252,6 @@ companies:
   # - {name: Elastic,      ats: greenhouse, token: elastic}
   # - {name: SoFi,         ats: greenhouse, token: sofi}
   # - {name: Betterment,   ats: greenhouse, token: betterment}
-  # - {name: Gemini,       ats: greenhouse, token: gemini}
   # - {name: Calendly,     ats: greenhouse, token: calendly}
   # - {name: Airtable,     ats: greenhouse, token: airtable}
   # - {name: Webflow,      ats: greenhouse, token: webflow}
