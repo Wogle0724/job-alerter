@@ -8,6 +8,7 @@ Run modes:
 """
 
 import argparse
+import concurrent.futures
 import logging
 import sys
 import time
@@ -21,19 +22,29 @@ log = logging.getLogger("job-alerter")
 
 
 def scan(companies, matcher, store, dry_run=False):
-    """Check every company once. Returns (new hits, per-company failures)."""
-    hits, failures = [], []
-    for c in companies:
-        name = c["name"]
+    """Check every company once. Returns (new hits, per-company failures).
+
+    Boards are fetched in parallel -- the run is almost entirely network wait,
+    and on GitHub Actions the wall-clock time is what gets billed.
+    """
+
+    def fetch_one(c):
         try:
-            jobs = sources.fetch(c)
+            return c, sources.fetch(c), None
         except sources.SourceError as e:
-            log.warning("%s: %s", name, e)
-            failures.append((name, str(e)))
-            continue
-        except Exception as e:  # a bad board must never kill the loop
-            log.warning("%s: unexpected error: %s", name, e)
-            failures.append((name, f"unexpected error: {e}"))
+            return c, None, str(e)
+        except Exception as e:  # a bad board must never kill the run
+            return c, None, f"unexpected error: {e}"
+
+    hits, failures = [], []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+        results = list(pool.map(fetch_one, companies))
+
+    for c, jobs, error in results:
+        name = c["name"]
+        if error:
+            log.warning("%-24s %s", name, error)
+            failures.append((name, error))
             continue
 
         matched = 0

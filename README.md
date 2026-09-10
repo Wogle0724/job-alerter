@@ -1,20 +1,27 @@
 # PM Internship Job Alerter
 
-A worker that watches company careers pages around the clock and emails me the
-moment a **Summer 2027 product management internship** goes up.
+Watches company careers pages around the clock and emails me the moment a
+**Summer 2027 product management internship** goes up.
 
-It polls every 20 minutes, matches postings against a keyword ruleset, and
-sends one digest email per cycle containing every new hit — with a direct link
-to the posting and a link to that company's full careers page. Each posting is
-alerted exactly once, ever.
+A GitHub Actions workflow runs every 20 minutes, checks ~50 company job boards,
+matches postings against a keyword ruleset, and sends one digest email
+containing every new hit — with a direct link to the posting and a link to that
+company's careers page. Each posting is alerted exactly once, ever.
+
+No server, no database, no hosting bill. GitHub runs it on a schedule and the
+repo itself stores the record of what's already been sent.
 
 ---
 
 ## How it works
 
 ```
-companies.yml ──▶ ATS adapters ──▶ keyword matcher ──▶ dedupe (SQLite) ──▶ email
-   (you edit)      (job feeds)       (rules.yml)        (Railway volume)   (Resend)
+GitHub Actions cron (every 20 min)
+        │
+        ▼
+companies.yml ──▶ ATS adapters ──▶ keyword matcher ──▶ dedupe ─────────▶ email
+   (you edit)      (job feeds)       (rules.yml)     state/alerted.json  (Resend)
+                                                     (committed to repo)
 ```
 
 Companies don't get scraped. Nearly every careers page is powered by an
@@ -30,7 +37,9 @@ are the real public posting URLs (usually on the company's own domain).
 | `rules.yml` | What counts as a match — job-title keywords and the target year. |
 | `app/sources.py` | One adapter per ATS platform. |
 | `app/matcher.py` | Applies `rules.yml` to each posting. |
-| `app/store.py` | SQLite record of what's already been alerted. |
+| `app/store.py` | Reads/writes `state/alerted.json`. |
+| `state/alerted.json` | Every posting already emailed. Committed by the workflow. |
+| `.github/workflows/check-jobs.yml` | The schedule and the run steps. |
 | `app/notify.py` | Builds and sends the digest email via Resend. |
 | `app/main.py` | The polling loop. |
 
@@ -83,20 +92,36 @@ cp .env.example .env          # then fill in RESEND_API_KEY
 .venv/bin/python -m app.main
 ```
 
-## Deploying on Railway
+## The schedule
 
-1. Create a project from this GitHub repo.
-2. Attach a **volume** mounted at `/data` — this is what keeps the alerter from
-   re-emailing you about every open job after each redeploy.
-3. Set these variables:
+`.github/workflows/check-jobs.yml` runs `python -m app.main --once` every 20
+minutes and commits `state/alerted.json` if anything new was sent. Two settings
+live in the repo's GitHub settings rather than in code:
 
-| Variable | Value |
-|---|---|
-| `RESEND_API_KEY` | from resend.com/api-keys |
-| `ALERT_EMAIL_TO` | your email |
-| `ALERT_EMAIL_FROM` | `Job Alerter <onboarding@resend.dev>` |
-| `DATA_DIR` | `/data` |
-| `POLL_INTERVAL_MINUTES` | `20` |
+| Where | Name | Value |
+|---|---|---|
+| Secrets | `RESEND_API_KEY` | from resend.com/api-keys |
+| Variables | `ALERT_EMAIL_TO` | your email |
+| Variables | `ALERT_EMAIL_FROM` | `Job Alerter <onboarding@resend.dev>` |
+
+The key is a secret (encrypted, never printed in logs); the two email addresses
+are plain variables.
+
+### Maintaining it
+
+- **Run it now:** Actions tab → *Check for PM internships* → *Run workflow*.
+  Tick `dry_run` to see what it would send without sending anything.
+- **Did it run?** The Actions tab lists every run. Green check = ran fine.
+- **Schedule drift is normal.** GitHub runs scheduled jobs best-effort, so
+  "every 20 minutes" is really "every 20–35 minutes." Fine for job postings.
+- **GitHub pauses schedules on public repos after 60 days of no commits.**
+  Pushing anything — even a new company — resets the clock. If alerts go quiet
+  for weeks, check this first.
+- **A board that breaks doesn't break the run.** Failures are logged and listed
+  at the bottom of the next alert email, and the other companies still get
+  checked.
+- **Resetting:** delete an entry from `state/alerted.json` to be re-alerted
+  about that posting. Delete the whole file to be re-alerted about everything.
 
 Resend's shared `onboarding@resend.dev` sender only delivers to the address you
 signed up with, which is all this needs. To send anywhere else, verify a domain

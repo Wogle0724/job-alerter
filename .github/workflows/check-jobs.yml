@@ -1,0 +1,65 @@
+name: Check for PM internships
+
+on:
+  # Every 20 minutes. GitHub queues scheduled runs on a best-effort basis, so
+  # expect the occasional 5-15 minute drift when their runners are busy.
+  schedule:
+    - cron: "*/20 * * * *"
+  # Lets you run it by hand from the Actions tab.
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Find matches but send no email and record nothing"
+        type: boolean
+        default: false
+
+# Never let two runs overlap -- they'd both try to commit the state file.
+concurrency:
+  group: check-jobs
+  cancel-in-progress: false
+
+permissions:
+  contents: write # needed to commit state/alerted.json back to the repo
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Scan job boards
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL_TO: ${{ vars.ALERT_EMAIL_TO }}
+          ALERT_EMAIL_FROM: ${{ vars.ALERT_EMAIL_FROM }}
+          DATA_DIR: state
+        run: |
+          python -m app.main --once \
+            ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      - name: Record what was alerted
+        if: ${{ !inputs.dry_run }}
+        run: |
+          if [[ -z "$(git status --porcelain state/)" ]]; then
+            echo "No new postings -- nothing to record."
+            exit 0
+          fi
+          git config user.name  "job-alerter"
+          git config user.email "actions@github.com"
+          git add state/alerted.json
+          git commit -m "Record alerted postings [skip ci]"
+          # Another run may have pushed while this one was scanning.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main && git push origin main && exit 0
+            echo "push attempt $attempt failed, retrying..."
+            sleep 5
+          done
+          exit 1

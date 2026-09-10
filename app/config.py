@@ -62,12 +62,30 @@ def load_rules():
     return _load_yaml("rules.yml")
 
 
+def load_dotenv():
+    """Read .env into the environment for local runs.
+
+    Hosting platforms inject real environment variables, which always win --
+    this only fills in what isn't already set.
+    """
+    path = ROOT / ".env"
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip())
+
+
 class Settings:
     def __init__(self):
+        load_dotenv()
         self.resend_key = os.environ.get("RESEND_API_KEY", "").strip()
         self.email_to = os.environ.get("ALERT_EMAIL_TO", "").strip()
         self.email_from = os.environ.get(
             "ALERT_EMAIL_FROM", "Job Alerter <onboarding@resend.dev>"
         ).strip()
         self.interval_minutes = float(os.environ.get("POLL_INTERVAL_MINUTES", "20"))
-        self.data_dir = os.environ.get("DATA_DIR", str(ROOT / "data"))
+        self.data_dir = os.environ.get("DATA_DIR", str(ROOT / "state"))
