@@ -1,0 +1,228 @@
+# ===========================================================================
+# THE COMPANIES YOU'RE WATCHING.  Edit this file, commit, push -> Railway
+# redeploys and picks up the change automatically.
+#
+# Each entry needs a `name` and an `ats` (the platform hosting their careers
+# page). To add a company, open their careers page and look at the URL:
+#
+#   job-boards.greenhouse.io/COMPANY   ->  ats: greenhouse   token: COMPANY
+#   jobs.lever.co/COMPANY              ->  ats: lever        token: COMPANY
+#   jobs.ashbyhq.com/COMPANY           ->  ats: ashby        token: COMPANY
+#   jobs.smartrecruiters.com/COMPANY   ->  ats: smartrecruiters  token: COMPANY
+#   apply.workable.com/COMPANY         ->  ats: workable     token: COMPANY
+#   TENANT.wdN.myworkdayjobs.com/SITE  ->  ats: workday  token: TENANT
+#                                          host: wdN     site: SITE
+#
+# Optional on any entry:
+#   careers_url: https://...   the "browse all openings" link in your email.
+#                              Defaults to the company's public board.
+#
+# Last resort for a company with no supported ATS:
+#   - name: Some Co
+#     ats: generic
+#     url: https://someco.com/careers      # only works if not JavaScript-only
+# ===========================================================================
+
+companies:
+  # ---- Amazon (own job platform) ------------------------------------------
+  - name: Amazon
+    ats: amazon
+
+  # ---- Greenhouse ---------------------------------------------------------
+  - name: Stripe
+    ats: greenhouse
+    token: stripe
+  - name: Databricks
+    ats: greenhouse
+    token: databricks
+  - name: Anthropic
+    ats: greenhouse
+    token: anthropic
+  - name: Figma
+    ats: greenhouse
+    token: figma
+  - name: Robinhood
+    ats: greenhouse
+    token: robinhood
+  - name: Coinbase
+    ats: greenhouse
+    token: coinbase
+  - name: Reddit
+    ats: greenhouse
+    token: reddit
+  - name: Airbnb
+    ats: greenhouse
+    token: airbnb
+  - name: Instacart
+    ats: greenhouse
+    token: instacart
+  - name: Discord
+    ats: greenhouse
+    token: discord
+  - name: Roblox
+    ats: greenhouse
+    token: roblox
+  - name: Duolingo
+    ats: greenhouse
+    token: duolingo
+  - name: Pinterest
+    ats: greenhouse
+    token: pinterest
+  - name: Cloudflare
+    ats: greenhouse
+    token: cloudflare
+  - name: Datadog
+    ats: greenhouse
+    token: datadog
+  - name: Scale AI
+    ats: greenhouse
+    token: scaleai
+  - name: Brex
+    ats: greenhouse
+    token: brex
+  - name: Affirm
+    ats: greenhouse
+    token: affirm
+  - name: Asana
+    ats: greenhouse
+    token: asana
+  - name: Samsara
+    ats: greenhouse
+    token: samsara
+  - name: Lyft
+    ats: greenhouse
+    token: lyft
+  - name: Twitch
+    ats: greenhouse
+    token: twitch
+  - name: Dropbox
+    ats: greenhouse
+    token: dropbox
+  - name: MongoDB
+    ats: greenhouse
+    token: mongodb
+  - name: Twilio
+    ats: greenhouse
+    token: twilio
+  - name: Okta
+    ats: greenhouse
+    token: okta
+  - name: GitLab
+    ats: greenhouse
+    token: gitlab
+  - name: Waymo
+    ats: greenhouse
+    token: waymo
+  - name: Vercel
+    ats: greenhouse
+    token: vercel
+  - name: Carta
+    ats: greenhouse
+    token: carta
+
+  # ---- Ashby --------------------------------------------------------------
+  - name: OpenAI
+    ats: ashby
+    token: openai
+  - name: Notion
+    ats: ashby
+    token: notion
+  - name: Ramp
+    ats: ashby
+    token: ramp
+  - name: Perplexity
+    ats: ashby
+    token: perplexity
+  - name: Linear
+    ats: ashby
+    token: linear
+  - name: Vanta
+    ats: ashby
+    token: vanta
+  - name: Cursor
+    ats: ashby
+    token: cursor
+  - name: Replit
+    ats: ashby
+    token: replit
+  - name: Sierra
+    ats: ashby
+    token: sierra
+
+  # ---- Lever --------------------------------------------------------------
+  - name: Palantir
+    ats: lever
+    token: palantir
+
+  # ---- Workday ------------------------------------------------------------
+  - name: NVIDIA
+    ats: workday
+    token: nvidia
+    host: wd5
+    site: NVIDIAExternalCareerSite
+  - name: Salesforce
+    ats: workday
+    token: salesforce
+    host: wd12
+    site: External_Career_Site
+  - name: Adobe
+    ats: workday
+    token: adobe
+    host: wd5
+    site: external_experienced
+  - name: Capital One
+    ats: workday
+    token: capitalone
+    host: wd12
+    site: Capital_One
+  - name: Workday
+    ats: workday
+    token: workday
+    host: wd5
+    site: Workday
+  - name: PayPal
+    ats: workday
+    token: paypal
+    host: wd1
+    site: jobs
+  - name: Mastercard
+    ats: workday
+    token: mastercard
+    host: wd1
+    site: CorporateCareers
+  - name: Target
+    ats: workday
+    token: target
+    host: wd5
+    site: targetcareers
+  - name: Autodesk
+    ats: workday
+    token: autodesk
+    host: wd1
+    site: Ext
+
+  # ---- More verified boards, uncomment to switch on ------------------------
+  # - {name: Chime,        ats: greenhouse, token: chime}
+  # - {name: Gusto,        ats: greenhouse, token: gusto}
+  # - {name: Flexport,     ats: greenhouse, token: flexport}
+  # - {name: Squarespace,  ats: greenhouse, token: squarespace}
+  # - {name: Peloton,      ats: greenhouse, token: peloton}
+  # - {name: Elastic,      ats: greenhouse, token: elastic}
+  # - {name: SoFi,         ats: greenhouse, token: sofi}
+  # - {name: Betterment,   ats: greenhouse, token: betterment}
+  # - {name: Gemini,       ats: greenhouse, token: gemini}
+  # - {name: Calendly,     ats: greenhouse, token: calendly}
+  # - {name: Airtable,     ats: greenhouse, token: airtable}
+  # - {name: Webflow,      ats: greenhouse, token: webflow}
+  # - {name: Amplitude,    ats: greenhouse, token: amplitude}
+  # - {name: Mixpanel,     ats: greenhouse, token: mixpanel}
+  # - {name: Faire,        ats: greenhouse, token: faire}
+  # - {name: Nuro,         ats: greenhouse, token: nuro}
+  # - {name: Lucid Motors, ats: greenhouse, token: lucidmotors}
+  # - {name: Mercor,       ats: ashby,      token: mercor}
+  # - {name: HP,        ats: workday, token: hp,        host: wd5, site: ExternalCareerSite}
+  # - {name: HPE,       ats: workday, token: hpe,       host: wd5, site: Jobsathpe}
+  # - {name: BlackRock, ats: workday, token: blackrock, host: wd1, site: BlackRock_Professional}
+  # - {name: KLA,       ats: workday, token: kla,       host: wd1, site: Search}
+  # - {name: Micron,    ats: workday, token: micron,    host: wd1, site: External}
+  # - {name: Boeing,    ats: workday, token: boeing,    host: wd1, site: EXTERNAL_CAREERS}

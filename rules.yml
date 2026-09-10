@@ -1,0 +1,70 @@
+# ---------------------------------------------------------------------------
+# What counts as a hit.
+#
+# A posting must match:  (a PRODUCT term)  AND  (an INTERN term)
+#                        AND NOT (an EXCLUDE term)
+#                        AND pass the year check.
+#
+# Everything here is matched on whole words, case-insensitively, against the
+# job TITLE. Edit freely -- no code changes needed.
+# ---------------------------------------------------------------------------
+
+# The season you're hunting for. A posting that names a *different* year in its
+# title (e.g. "Summer 2026") gets rejected. A posting that names no year at all
+# is still accepted, because most companies leave the year out.
+target_year: 2027
+
+product_terms:
+  # Core product management
+  - product manager
+  - product management
+  - product mgmt
+  - associate product manager
+  - apm
+  - pm intern
+  - product intern
+  - product management intern
+  - product owner
+  # Adjacent (you opted in): technical program/product, design, strategy
+  - technical program manager
+  - technical product manager
+  - tpm
+  - product design
+  - product designer
+  - product strategy
+  - product operations
+
+intern_terms:
+  - intern
+  - interns
+  - internship
+  - co-op
+  - coop
+  - summer analyst
+  - summer associate
+  - rotational
+  - university
+  - student
+
+# If any of these appear in the title, the posting is thrown out even if the
+# terms above matched. This is your noise filter -- add to it as you see junk.
+exclude_terms:
+  - product marketing
+  - sales
+  - recruiter
+  - customer support
+  - software engineer
+  - software engineering
+  - data scientist
+  - data engineer
+  - security engineer
+  - phd
+
+# Seasons that disqualify a posting outright when paired with a wrong year,
+# e.g. "Fall 2026 Product Management Co-op".
+season_words:
+  - summer
+  - fall
+  - autumn
+  - winter
+  - spring
