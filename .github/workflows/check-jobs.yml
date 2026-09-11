@@ -1,8 +1,8 @@
 name: Check for PM internships
 
 on:
-  # Every 20 minutes. GitHub queues scheduled runs on a best-effort basis, so
-  # expect the occasional 5-15 minute drift when their runners are busy.
+  # Requests every 20 minutes, but GitHub drops most slots on free public
+  # repos -- in practice this fires every 2-5 hours. See README.
   schedule:
     - cron: "*/20 * * * *"
   # Lets you run it by hand from the Actions tab.

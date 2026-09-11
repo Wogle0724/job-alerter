@@ -3,7 +3,7 @@
 Watches company careers pages around the clock and emails me the moment a
 **Summer 2027 product management internship** goes up.
 
-A GitHub Actions workflow runs every 20 minutes, checks ~50 company job boards,
+A GitHub Actions workflow runs on a schedule, checks ~60 company job boards,
 matches postings against a keyword ruleset, and sends one digest email
 containing every new hit — with a direct link to the posting and a link to that
 company's careers page. Each posting is alerted exactly once, ever.
@@ -16,7 +16,7 @@ repo itself stores the record of what's already been sent.
 ## How it works
 
 ```
-GitHub Actions cron (every 20 min)
+GitHub Actions cron
         │
         ▼
 companies.yml ──▶ ATS adapters ──▶ keyword matcher ──▶ dedupe ─────────▶ email
@@ -123,8 +123,17 @@ cp .env.example .env          # then fill in RESEND_API_KEY
 
 ## The schedule
 
-`.github/workflows/check-jobs.yml` runs `python -m app.main --once` every 20
-minutes and commits `state/alerted.json` if anything new was sent. Two settings
+`.github/workflows/check-jobs.yml` runs `python -m app.main --once` and commits
+`state/alerted.json` if anything new was sent.
+
+**Real-world cadence: every 2-5 hours, not every 20 minutes.** The cron is set
+to `*/20`, but GitHub heavily deprioritizes frequent scheduled jobs on free
+public repos and silently drops most slots. Measured gaps over one day were
+123, 158, 211, 235 and 319 minutes. This is accepted on purpose: internship
+postings stay open for weeks, so a few hours' delay costs nothing, and the
+alternatives (an external service holding a GitHub token, or parking a runner
+24/7) add risk for no real benefit. If you ever do need true 20-minute polling,
+the fix is an external scheduler calling the `workflow_dispatch` API. Two settings
 live in the repo's GitHub settings rather than in code:
 
 | Where | Name | Value |
@@ -141,8 +150,8 @@ are plain variables.
 - **Run it now:** Actions tab → *Check for PM internships* → *Run workflow*.
   Tick `dry_run` to see what it would send without sending anything.
 - **Did it run?** The Actions tab lists every run. Green check = ran fine.
-- **Schedule drift is normal.** GitHub runs scheduled jobs best-effort, so
-  "every 20 minutes" is really "every 20–35 minutes." Fine for job postings.
+- **Long gaps are normal, not a fault.** See the cadence note above: 2-5 hours
+  between runs is expected behaviour, not something broken.
 - **GitHub pauses schedules on public repos after 60 days of no commits.**
   Pushing anything — even a new company — resets the clock. If alerts go quiet
   for weeks, check this first.
