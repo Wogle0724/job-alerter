@@ -48,6 +48,12 @@
       "url": "https://job-boards.greenhouse.io/doordashusa/jobs/8176863",
       "alerted_at": "2026-09-11T15:13:04Z"
     },
+    "Microsoft|4466491264": {
+      "company": "Microsoft",
+      "title": "Product Management Intern - CTJ - TS",
+      "url": "https://www.linkedin.com/jobs/view/product-management-intern-ctj-ts-at-microsoft-4466491264",
+      "alerted_at": "2026-09-12T14:14:13Z"
+    },
     "Palantir|1a935143-e857-480c-bc5a-ad625d754eb6": {
       "company": "Palantir",
       "title": "Product Designer, Internship",
@@ -91,6 +97,6 @@
       "alerted_at": "2026-09-10T00:53:57Z"
     }
   },
-  "count": 15,
-  "updated_at": "2026-09-11T15:13:04Z"
+  "count": 16,
+  "updated_at": "2026-09-12T14:14:13Z"
 }
