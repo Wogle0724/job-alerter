@@ -5,8 +5,8 @@ Watches company careers pages around the clock and emails me the moment a
 
 A GitHub Actions workflow runs on a schedule, checks ~60 company job boards,
 matches postings against a keyword ruleset, and sends one digest email
-containing every new hit — with a direct link to the posting and a link to that
-company's careers page. Each posting is alerted exactly once, ever.
+containing every new hit — with the URL of the posting and of that company's
+careers page. Each posting is alerted exactly once, ever.
 
 No server, no database, no hosting bill. GitHub runs it on a schedule and the
 repo itself stores the record of what's already been sent.
@@ -164,3 +164,12 @@ are plain variables.
 Resend's shared `onboarding@resend.dev` sender only delivers to the address you
 signed up with, which is all this needs. To send anywhere else, verify a domain
 in Resend and change `ALERT_EMAIL_FROM`.
+
+**Why the email has no clickable buttons.** Resend delivers through Amazon SES,
+and SES click tracking rewrites every `href` into an `awstrack.me` redirect.
+Microsoft Defender flags that domain as malicious, so on a school or work inbox
+every link in the alert got blocked. The email therefore prints URLs as plain
+text — there is no `href` for SES to rewrite, and most mail clients make the URL
+clickable themselves, straight to the real job board. Don't reintroduce `<a>`
+tags in `app/notify.py` without turning click tracking off first, which needs
+your own verified domain in Resend.

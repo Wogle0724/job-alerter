@@ -32,11 +32,20 @@ def _subject(hits):
 
 
 def _render_html(hits, failures, year="2027"):
+    """Build the HTML body.
+
+    Deliberately contains no <a> tags. Resend sends through Amazon SES, and SES
+    click tracking rewrites every href into an awstrack.me redirect -- which
+    Microsoft Defender flags as malicious, so every link in the alert got
+    blocked. Printing the URL as plain text leaves SES nothing to rewrite;
+    mail clients autolink it themselves, straight to the real job board.
+    """
     rows = []
     for h in hits:
         job, v = h["job"], h["verdict"]
         color = BADGE.get(v["label"], "#666")
         loc = html.escape(job.get("location") or "Location not listed")
+        careers = h.get("careers_url") or job["url"]
         rows.append(
             f"""
     <tr><td style="padding:18px 0;border-bottom:1px solid #e6e6e6;">
@@ -44,8 +53,7 @@ def _render_html(hits, failures, year="2027"):
         {html.escape(h['company'])}
       </div>
       <div style="margin:4px 0 6px;font-size:17px;font-weight:600;line-height:1.3;">
-        <a href="{html.escape(job['url'])}" style="color:#111;text-decoration:none;">
-          {html.escape(job['title'])}</a>
+        {html.escape(job['title'])}
       </div>
       <div style="font-size:13px;color:#555;">{loc}</div>
       <div style="margin-top:10px;font-size:12px;color:#555;">
@@ -54,15 +62,12 @@ def _render_html(hits, failures, year="2027"):
           {v['label']} confidence</span>
         &nbsp;{' &#183; '.join(html.escape(r) for r in v['reasons'])}
       </div>
-      <div style="margin-top:12px;">
-        <a href="{html.escape(job['url'])}"
-           style="display:inline-block;padding:8px 14px;background:#111;color:#fff;
-                  border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;">
-          View posting</a>
-        <a href="{html.escape(h.get('careers_url') or job['url'])}"
-           style="display:inline-block;margin-left:8px;padding:8px 14px;border:1px solid #ccc;
-                  color:#333;border-radius:6px;text-decoration:none;font-size:13px;">
-          All {html.escape(h['company'])} openings</a>
+      <div style="margin-top:12px;padding:10px 12px;background:#f6f7f9;border-radius:6px;
+                  font-size:12px;line-height:1.5;">
+        <div style="color:#888;">Posting</div>
+        <div style="color:#1a4fa0;word-break:break-all;">{html.escape(job['url'])}</div>
+        <div style="color:#888;margin-top:8px;">All {html.escape(h['company'])} openings</div>
+        <div style="color:#1a4fa0;word-break:break-all;">{html.escape(careers)}</div>
       </div>
     </td></tr>"""
         )
@@ -70,7 +75,8 @@ def _render_html(hits, failures, year="2027"):
     warn = ""
     if failures:
         items = "".join(
-            f"<li>{html.escape(name)} — {html.escape(err)}</li>" for name, err in failures
+            f"<li>{html.escape(name)} &#8212; {html.escape(err)}</li>"
+            for name, err in failures
         )
         warn = (
             '<div style="margin-top:24px;padding:12px 14px;background:#fff8e1;'
@@ -90,6 +96,8 @@ def _render_html(hits, failures, year="2027"):
   <table style="width:100%;border-collapse:collapse;margin-top:8px;">{''.join(rows)}</table>
   {warn}
   <div style="margin-top:24px;font-size:11px;color:#999;">
+    URLs are shown as plain text on purpose &#8212; clickable links get rewritten
+    by the mail provider and blocked by your school's spam filter.
     You get one alert per posting. Tune the keyword rules in rules.yml,
     add companies in companies.yml.
   </div>
