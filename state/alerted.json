@@ -48,6 +48,12 @@
       "url": "https://job-boards.greenhouse.io/doordashusa/jobs/8176863",
       "alerted_at": "2026-09-11T15:13:04Z"
     },
+    "Duolingo|8806187002": {
+      "company": "Duolingo",
+      "title": "Associate Product Manager, Intern",
+      "url": "https://careers.duolingo.com/jobs/8806187002?gh_jid=8806187002",
+      "alerted_at": "2026-09-15T17:17:36Z"
+    },
     "Figma|6180005004": {
       "company": "Figma",
       "title": "Product Design Intern (2027)",
@@ -127,6 +133,6 @@
       "alerted_at": "2026-09-10T00:53:57Z"
     }
   },
-  "count": 21,
-  "updated_at": "2026-09-15T12:37:09Z"
+  "count": 22,
+  "updated_at": "2026-09-15T17:17:36Z"
 }
