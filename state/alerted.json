@@ -1,5 +1,11 @@
 {
   "alerted": {
+    "Adobe|/job/San-Jose/XMLNAME-2027-MBA-University-Graduate---Product-Manager_R171900": {
+      "company": "Adobe",
+      "title": "2027 MBA University Graduate - Product Manager",
+      "url": "https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced/job/San-Jose/XMLNAME-2027-MBA-University-Graduate---Product-Manager_R171900",
+      "alerted_at": "2026-09-23T00:43:41Z"
+    },
     "Amazon|10509639": {
       "company": "Amazon",
       "title": "Product Manager Technical (PMT) Intern - Summer 2027",
@@ -181,6 +187,6 @@
       "alerted_at": "2026-09-15T20:19:11Z"
     }
   },
-  "count": 30,
-  "updated_at": "2026-09-22T22:01:29Z"
+  "count": 31,
+  "updated_at": "2026-09-23T00:43:41Z"
 }
