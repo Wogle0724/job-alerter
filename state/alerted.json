@@ -1,5 +1,11 @@
 {
   "alerted": {
+    "Adobe|/job/San-Jose/XMLNAME-2027-MBA-Intern---Product-Manager_R172261": {
+      "company": "Adobe",
+      "title": "2027 MBA Intern \u2013 Product Manager",
+      "url": "https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced/job/San-Jose/XMLNAME-2027-MBA-Intern---Product-Manager_R172261",
+      "alerted_at": "2026-09-30T20:45:00Z"
+    },
     "Adobe|/job/San-Jose/XMLNAME-2027-MBA-University-Graduate---Product-Manager_R171900": {
       "company": "Adobe",
       "title": "2027 MBA University Graduate - Product Manager",
@@ -235,6 +241,6 @@
       "alerted_at": "2026-09-15T20:19:11Z"
     }
   },
-  "count": 39,
-  "updated_at": "2026-09-28T01:12:13Z"
+  "count": 40,
+  "updated_at": "2026-09-30T20:45:00Z"
 }
