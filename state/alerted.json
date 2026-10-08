@@ -114,6 +114,12 @@
       "url": "https://boards.greenhouse.io/embed/job_app?for=gemini&token=8214332&gh_jid=8214332",
       "alerted_at": "2026-09-18T21:15:50Z"
     },
+    "Gemini|8240208": {
+      "company": "Gemini",
+      "title": "Product Design Intern (Winter 2027)",
+      "url": "https://boards.greenhouse.io/embed/job_app?for=gemini&token=8240208&gh_jid=8240208",
+      "alerted_at": "2026-10-08T05:49:25Z"
+    },
     "Google|103464941339452102": {
       "company": "Google",
       "title": "Associate Product Manager BS/MS Intern, 2027",
@@ -289,6 +295,6 @@
       "alerted_at": "2026-09-15T20:19:11Z"
     }
   },
-  "count": 48,
-  "updated_at": "2026-10-05T09:36:56Z"
+  "count": 49,
+  "updated_at": "2026-10-08T05:49:25Z"
 }
