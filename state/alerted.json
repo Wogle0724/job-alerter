@@ -78,6 +78,24 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=6883068002",
       "alerted_at": "2026-09-10T00:53:57Z"
     },
+    "Databricks|8133715002": {
+      "company": "Databricks",
+      "title": "Product Management Intern (2027) - Amsterdam",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8133715002",
+      "alerted_at": "2026-10-09T18:52:48Z"
+    },
+    "Databricks|8145776002": {
+      "company": "Databricks",
+      "title": "Product Management Intern (2027) - Berlin",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8145776002",
+      "alerted_at": "2026-10-09T18:52:48Z"
+    },
+    "Databricks|8863328002": {
+      "company": "Databricks",
+      "title": "Product Management Intern (2027) - Belgrade",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8863328002",
+      "alerted_at": "2026-10-09T18:52:48Z"
+    },
     "Datadog|8108241": {
       "company": "Datadog",
       "title": "Product Management Intern",
@@ -295,6 +313,6 @@
       "alerted_at": "2026-09-15T20:19:11Z"
     }
   },
-  "count": 49,
-  "updated_at": "2026-10-08T05:49:25Z"
+  "count": 52,
+  "updated_at": "2026-10-09T18:52:48Z"
 }
