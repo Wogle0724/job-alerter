@@ -162,6 +162,12 @@
       "url": "https://www.google.com/about/careers/applications/jobs/results/jobs/results/80582381009806022-technical-program-manager-intern-bsms-summer-2027",
       "alerted_at": "2026-09-14T14:58:31Z"
     },
+    "Google|90179993312600774": {
+      "company": "Google",
+      "title": "Product Design Engineering Intern, 2027",
+      "url": "https://www.google.com/about/careers/applications/jobs/results/jobs/results/90179993312600774-product-design-engineering-intern-2027",
+      "alerted_at": "2026-10-15T09:26:32Z"
+    },
     "Intuit|4467726048": {
       "company": "Intuit",
       "title": "Summer 2027: Product Manager Intern",
@@ -319,6 +325,6 @@
       "alerted_at": "2026-09-15T20:19:11Z"
     }
   },
-  "count": 53,
-  "updated_at": "2026-10-14T12:08:08Z"
+  "count": 54,
+  "updated_at": "2026-10-15T09:26:32Z"
 }
