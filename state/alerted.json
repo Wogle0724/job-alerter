@@ -372,6 +372,18 @@
       "url": "https://careers.roblox.com/jobs/8143984?gh_jid=8143984",
       "alerted_at": "2026-09-10T00:53:57Z"
     },
+    "Stripe|8332681": {
+      "company": "Stripe",
+      "title": "Product Design Intern",
+      "url": "https://stripe.com/jobs/search?gh_jid=8332681",
+      "alerted_at": "2026-11-06T02:51:19Z"
+    },
+    "Stripe|8332683": {
+      "company": "Stripe",
+      "title": "Product Design Intern",
+      "url": "https://stripe.com/jobs/search?gh_jid=8332683",
+      "alerted_at": "2026-11-06T02:51:19Z"
+    },
     "Waymo|8198582": {
       "company": "Waymo",
       "title": "2027 Summer Intern, MBA, Salesforce Product Owner",
@@ -379,6 +391,6 @@
       "alerted_at": "2026-09-15T20:19:11Z"
     }
   },
-  "count": 63,
-  "updated_at": "2026-10-30T00:23:57Z"
+  "count": 65,
+  "updated_at": "2026-11-06T02:51:19Z"
 }
