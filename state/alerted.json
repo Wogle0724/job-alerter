@@ -426,6 +426,12 @@
       "url": "https://stripe.com/jobs/search?gh_jid=8332683",
       "alerted_at": "2026-11-06T02:51:19Z"
     },
+    "Uber|4490829824": {
+      "company": "Uber",
+      "title": "2027 Product Management Intern, US",
+      "url": "https://www.linkedin.com/jobs/view/2027-product-management-intern-us-at-uber-4490829824",
+      "alerted_at": "2026-11-18T08:25:04Z"
+    },
     "Waymo|8198582": {
       "company": "Waymo",
       "title": "2027 Summer Intern, MBA, Salesforce Product Owner",
@@ -439,6 +445,6 @@
       "alerted_at": "2026-11-17T08:14:37Z"
     }
   },
-  "count": 73,
-  "updated_at": "2026-11-17T08:14:37Z"
+  "count": 74,
+  "updated_at": "2026-11-18T08:25:04Z"
 }
